@@ -155,6 +155,12 @@
 
   .bell { position: relative; }
   .bell .bdot { position: absolute; top: 6px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: #e0a54e; border: 1.5px solid #050607; }
+
+  .alertstrip.urgent { background: #d92d20; border-color: #b42318; }
+  .alertstrip.urgent b { color: #fff; }
+  .alertstrip.urgent small { color: rgba(255,255,255,0.88); }
+  .alertstrip.urgent .goto { color: #fff; }
+  .alertstrip.urgent .ad { background: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
 </style>
 
 <div class="stage"><div class="device">
@@ -168,7 +174,7 @@
     <div class="pad">
       <div class="h1">Rent armored.<br>Arrive untouchable.</div>
       <div class="search">🔍&nbsp; Search the fleet · Houston, TX</div>
-      <button class="alertstrip" onclick="go('shield')">
+      <button class="alertstrip" id="alertstrip" onclick="go('shield')">
         <span class="ad"></span>
         <span><b>2 incidents near your places overnight</b><small>River Oaks &amp; Galleria · nothing within 1 mi of Home</small></span>
         <span class="goto">Shield ›</span>
@@ -472,5 +478,12 @@
     cap.textContent = FLEETCAPS[tag];
     cap.style.display = FLEETCAPS[tag] ? "" : "none";
   }
+
+  // Alert urgency: newest incident within 24h -> red/white urgent strip; older -> calm orange.
+  var NEWEST_ALERT_MINUTES = 12; // demo value: latest incident 12 minutes ago
+  (function () {
+    var s = document.getElementById("alertstrip");
+    if (s && NEWEST_ALERT_MINUTES <= 24 * 60) s.classList.add("urgent");
+  })();
 </script>
 </body></html>
