@@ -161,6 +161,17 @@
   .alertstrip.urgent small { color: rgba(255,255,255,0.88); }
   .alertstrip.urgent .goto { color: #fff; }
   .alertstrip.urgent .ad { background: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+
+  .modeseg { display: flex; background: var(--chip); border-radius: 14px; padding: 4px; margin-top: 15px; }
+  .modeseg button { flex: 1; border: none; background: none; padding: 10px; border-radius: 11px; font-size: 13.5px; font-weight: 700; color: var(--sub); font-family: inherit; }
+  .modeseg button.on { background: #fff; color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.10); }
+  .terms { display: flex; gap: 8px; margin-top: 14px; }
+  .terms button { flex: 1; border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 10px 4px; font-family: inherit; font-size: 12.5px; font-weight: 700; color: var(--ink); text-align: center; }
+  .terms button.on { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
+  .terms button small { display: block; font-size: 9.5px; font-weight: 600; color: var(--sub); margin-top: 3px; letter-spacing: 0.03em; }
+  .quoteline { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; }
+  .quoteline .q1 { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+  .quoteline .q2 { font-size: 12px; color: var(--sub); margin-top: 2px; }
 </style>
 
 <div class="stage"><div class="device">
@@ -229,15 +240,48 @@
       <div class="h1" id="d_name" style="font-size:22px;margin-top:12px">Armored Ford F-150</div>
       <div class="sub" id="d_sub">Rhodium Metal Technology · 500 kg lighter armor</div>
       <div class="specrow" id="d_specs"></div>
-      <div class="pricebar">
-        <span class="p" id="d_price">$1,800 <small>/ day</small></span>
-        <span class="pill g" id="d_avail">Available now</span>
+
+      <div class="modeseg">
+        <button id="m_rent" class="on" onclick="setOffer('rent')">Rent</button>
+        <button id="m_lease" onclick="setOffer('lease')">Lease</button>
+        <button id="m_buy" onclick="setOffer('buy')">Buy</button>
       </div>
-      <p class="desc" id="d_desc"></p>
-      <div class="note-line">🛡&nbsp; Reserve with a $1,000 deposit · free cancellation until 24h before pickup</div>
+
+      <div id="off_rent">
+        <div class="pricebar">
+          <span class="p" id="d_price">$1,500 <small>/ day</small></span>
+          <span class="pill g" id="d_avail">Available now</span>
+        </div>
+        <p class="desc" id="d_desc"></p>
+        <div class="note-line">🛡&nbsp; Reserve with a $1,000 deposit · free cancellation until 24h before pickup</div>
+      </div>
+
+      <div id="off_lease" style="display:none">
+        <div class="terms">
+          <button class="on" onclick="setTerm(1,this)">1 month<small>SHORT TERM</small></button>
+          <button onclick="setTerm(6,this)">6 months<small>POPULAR</small></button>
+          <button onclick="setTerm(12,this)">12 months<small>BEST RATE</small></button>
+        </div>
+        <div class="quoteline">
+          <div><div class="q1">Monthly rate on request</div><div class="q2" id="l_term">1-month term · invoiced monthly</div></div>
+          <span class="pill g">Available</span>
+        </div>
+        <p class="desc">Long-term protection for executives, visiting teams and extended assignments. Our team confirms your terms and invoices monthly — nothing is charged online.</p>
+        <div class="note-line">📄&nbsp; Your invoice arrives within one business day</div>
+      </div>
+
+      <div id="off_buy" style="display:none">
+        <div class="quoteline">
+          <div><div class="q1">Price on request</div><div class="q2">Built to order · 8–16 weeks</div></div>
+          <span class="pill g">Slots open</span>
+        </div>
+        <p class="desc">Commission this vehicle to your own specification — armor level, interior, communications and finish. Our team walks you through the build and invoices your production slot.</p>
+        <div class="note-line">🏭&nbsp; Houston build facility · worldwide shipping arranged</div>
+      </div>
+
       <div style="height:10px"></div>
     </div>
-    <div class="ctabar"><button class="cta" style="margin-top:14px" onclick="go('booking')" id="d_cta">Reserve · $1,000 deposit</button></div>
+    <div class="ctabar"><button class="cta" style="margin-top:14px" onclick="ctaAction()" id="d_cta">Reserve · $1,000 deposit</button></div>
   </section>
 
   <!-- ============ BOOKING ============ -->
@@ -379,6 +423,24 @@
     <div style="height:8px"></div></div>
     <nav class="tabbar"><button class="tab" onclick="go('home')"><svg width="19" height="19" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 16 L4 12 L6 7 Q6.5 6 8 6 L16 6 Q17.5 6 18 7 L20 12 L20 16 M4 12 L20 12 M6.5 16 a1.2 1.2 0 1 0 0.01 0 M17.5 16 a1.2 1.2 0 1 0 0.01 0"/></svg>Fleet</button><button class="tab" onclick="go('shield')"><svg width="19" height="19" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M12 3 L19 6 L19 11 Q19 17 12 21 Q5 17 5 11 L5 6 Z"/></svg>Shield</button><button class="tab" onclick="go('trips')"><svg width="19" height="19" viewBox="0 0 24 24"><rect x="4" y="6" width="16" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 10.5 L20 10.5 M8.5 4 L8.5 7 M15.5 4 L15.5 7"/></svg>Trips</button><button class="tab on"><svg width="19" height="19" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M5 20 Q6.5 15 12 15 Q17.5 15 19 20"/></svg>Account</button></nav>
     </section>
+  <section class="scr" id="enquiry">
+    <div class="appbar"><button class="roundbtn" onclick="go('detail')">‹</button><b style="font-size:15px">Request sent</b><span style="width:36px"></span></div>
+    <div class="okwrap" style="padding-top:14px">
+      <div class="okring">✓</div>
+      <div class="h1" style="font-size:23px">We're on it.</div>
+      <div class="sub">Reference RQ-4417 · we reply within one business day</div>
+    </div>
+    <div class="pad" style="flex:1">
+      <div class="rowcard"><div style="display:flex;gap:10px;align-items:center"><img id="e_thumb" src="" alt=""><div><div class="t" id="e_name">Armored Cadillac Escalade-V</div><div class="s" id="e_kind">6-month lease</div></div></div><span class="pill g">Received</span></div>
+      <div class="h2s">What happens next</div>
+      <div class="rowcard"><div><div class="t">1 · We confirm your terms</div><div class="s">A specialist calls to agree dates, specification and handover</div></div></div>
+      <div class="rowcard"><div><div class="t">2 · Your invoice arrives</div><div class="s">By email — payable by card, bank transfer or Zelle</div></div></div>
+      <div class="rowcard"><div><div class="t">3 · We schedule handover</div><div class="s">Delivered to you, or collected at the showroom</div></div></div>
+      <div class="rowcard"><div><div class="t">Questions before then?</div><div class="s">Our line is answered 24/7</div></div><span class="link">CALL</span></div>
+      <div style="height:8px"></div>
+    </div>
+    <div class="ctabar"><button class="cta" style="margin-top:12px;background:#fff;color:var(--ink);border:1.5px solid var(--ink)" onclick="go('home')">Back to the fleet</button></div>
+  </section>
 </div></div>
 
 <script>
@@ -434,6 +496,7 @@
       im.onclick = function(){ document.getElementById("d_hero").src = src; th.querySelectorAll("img").forEach(function(x){ x.className = ""; }); im.className = "on"; };
       th.appendChild(im);
     });
+    setOffer("rent");
     go("detail");
   }
   var mode = "delivery";
@@ -485,5 +548,34 @@
     var s = document.getElementById("alertstrip");
     if (s && NEWEST_ALERT_MINUTES <= 24 * 60) s.classList.add("urgent");
   })();
+
+  // Rent / Lease / Buy — rental is self-serve; lease and purchase are quote-then-invoice.
+  var offer = "rent", leaseTerm = 1;
+  function setOffer(m) {
+    offer = m;
+    ["rent", "lease", "buy"].forEach(function (k) {
+      document.getElementById("m_" + k).className = (k === m) ? "on" : "";
+      document.getElementById("off_" + k).style.display = (k === m) ? "" : "none";
+    });
+    document.getElementById("d_cta").textContent =
+      (m === "rent") ? "Reserve · $1,000 deposit"
+      : (m === "lease") ? "Request lease terms"
+      : "Request a build consultation";
+  }
+  function setTerm(n, el) {
+    leaseTerm = n;
+    el.parentNode.querySelectorAll("button").forEach(function (b) { b.className = ""; });
+    el.className = "on";
+    document.getElementById("l_term").textContent = n + "-month term · invoiced monthly";
+  }
+  function ctaAction() {
+    if (offer === "rent") { go("booking"); return; }
+    var v = VEHICLES[current];
+    document.getElementById("e_thumb").src = v.imgs[0];
+    document.getElementById("e_name").textContent = v.name;
+    document.getElementById("e_kind").textContent =
+      (offer === "lease") ? (leaseTerm + "-month lease enquiry") : "Purchase enquiry · built to order";
+    go("enquiry");
+  }
 </script>
 </body></html>
